@@ -11,7 +11,11 @@ class BackupTest extends TestCase
         $service = new NormalizerService(__DIR__ . '/Support/.env.example', [__DIR__ . '/Support/out/.env']);
         $service->normalize();
 
-        self::assertFileDoesNotExist(__DIR__ . '/Support/out/.env.bak');
+        if (method_exists(self::class, 'assertFileDoesNotExist')) {
+            self::assertFileDoesNotExist(__DIR__ . '/Support/out/.env.bak');
+        } else {
+            self::assertFileNotExists(__DIR__ . '/Support/out/.env.bak');
+        }
     }
 
     public function testBackup()
