@@ -60,14 +60,19 @@ class NormalizerService
 
     public function normalize(): void
     {
-        $referenceContent = $this->getContents($this->reference);
+        $referenceContent = self::getContents($this->reference);
 
         if ($this->createBackup) {
-            // TODO
+            // TODO create backup files
         }
 
-        foreach ($this->output as $item) {
-            $itemContent = $this->getContents($item);
+        foreach ($this->output as $file) {
+            $content = $this->normalizeContent(
+                $referenceContent,
+                self::getContents($file)
+            );
+
+            // TODO write content
         }
     }
 
@@ -100,7 +105,7 @@ class NormalizerService
             }
 
             // Append the reference variable with the original value
-            $normalizedContent[] = $originalContent->getVariableLine($line);
+            $normalizedContent[] = $originalContent->buildVariableLine($line);
 
             $writtenVariables[$line->getVariable()] = $line;
         }
@@ -113,7 +118,7 @@ class NormalizerService
             $normalizedContent[] = '';
 
             foreach ($missingVariables as $name) {
-                $normalizedContent[] = $originalContent->getVariableLine($originalVariables[$name]);
+                $normalizedContent[] = $originalContent->buildVariableLine($originalVariables[$name]);
             }
         }
 
@@ -125,7 +130,7 @@ class NormalizerService
      *
      * @return \romanzipp\EnvNormalizer\Services\Content
      */
-    public function getContents(SplFileInfo $file): Content
+    public static function getContents(SplFileInfo $file): Content
     {
         return new Content(file_get_contents($file->getPathname()));
     }

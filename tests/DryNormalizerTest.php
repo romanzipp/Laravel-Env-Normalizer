@@ -134,10 +134,35 @@ class DryNormalizerTest extends TestCase
         ]), (string) $content);
     }
 
-    public function testAppendsAdditionalVariablesOnBottom()
+    public function testTrimsWhitespaces()
     {
         $content = $this->newService()->normalizeContent(
             new Content(implode(PHP_EOL, [
+                'FIRST=',
+                '  ',
+                '# Tests  ',
+                '',
+                'SECOND=',
+            ])),
+            new Content(implode(PHP_EOL, [
+                'FIRST=foo    ',
+                'SECOND=bar',
+            ]))
+        );
+
+        self::assertSame(implode(PHP_EOL, [
+            'FIRST=foo',
+            '',
+            '# Tests',
+            '',
+            'SECOND=bar',
+        ]), (string) $content);
+    }
+
+    public function testAppendsAdditionalVariablesOnBottom()
+    {
+        $content = $this->newService()->normalizeContent(
+            $c = new Content(implode(PHP_EOL, [
                 'FIRST=',
                 '',
                 '# Tests',

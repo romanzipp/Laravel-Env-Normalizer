@@ -21,7 +21,7 @@ class Line
 
     public function isBlank(): bool
     {
-        return '' === trim($this->content);
+        return '' === $this->content;
     }
 
     public function getContent(): string
@@ -36,6 +36,10 @@ class Line
 
     public function isVariable(): bool
     {
+        if ($this->isBlank() || $this->isComment()) {
+            return false;
+        }
+
         return null !== $this->getVariable();
     }
 
@@ -51,7 +55,7 @@ class Line
 
     private function checkVariable(): ?string
     {
-        if (preg_match('/([A-Z0-9_]+)=?/', $this->content, $matches)) {
+        if (preg_match('/^([A-Z0-9_]+)=?/', $this->content, $matches)) {
             return $matches[1];
         }
 
@@ -60,7 +64,7 @@ class Line
 
     private function checkValue(): ?string
     {
-        if (preg_match('/[A-Z0-9_]+=(.*)/', $this->content, $matches)) {
+        if (preg_match('/^[A-Z0-9_]+=(.*)/', $this->content, $matches)) {
             return $matches[1];
         }
 

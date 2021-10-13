@@ -58,7 +58,7 @@ class Content
      *
      * @return string
      */
-    public function getVariableLine(Line $referenceLine): string
+    public function buildVariableLine(Line $referenceLine): string
     {
         $variableLine = $this->getVariable($referenceLine->getVariable());
 
