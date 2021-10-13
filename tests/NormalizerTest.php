@@ -57,21 +57,9 @@ class NormalizerTest extends TestCase
 
         self::assertFileExists($secondsTarget);
         self::assertSame(implode(PHP_EOL, [
-            'BASE_URL=http://example.com',
-            '',
             '# Databse',
             '',
-            'DB_HOST=10.0.0.10',
-            'DB_USER=prod',
-            'DB_PASSWORD=123456',
-            '',
             '# Mail',
-            '',
-            'MAIL_CONNECTION=foo',
-            '',
-            '# Not found while normalizing',
-            '',
-            'MAIL_FROM=mail@example.com',
         ]), file_get_contents($secondsTarget));
     }
 }

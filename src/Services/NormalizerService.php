@@ -126,6 +126,15 @@ class NormalizerService
             }
         }
 
+        foreach ($normalizedContent as $index => $line) {
+            if (empty($line) && isset($normalizedContent[$index + 1]) && empty($normalizedContent[$index + 1])) {
+                unset($normalizedContent[$index]);
+            }
+        }
+
+        // TODO remove duplicate following empty lines
+        // TODO remove comments without following variables
+
         return new Content(implode(PHP_EOL, $normalizedContent));
     }
 

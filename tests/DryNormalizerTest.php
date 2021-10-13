@@ -84,26 +84,35 @@ class DryNormalizerTest extends TestCase
         ]), (string) $content);
     }
 
-    public function testKeepsMultipleEmptyLines()
+    public function testRemovesFollowingDuplicateEmptyLines()
     {
         $content = $this->newService()->normalizeContent(
             new Content(implode(PHP_EOL, [
+                '',
+                '',
                 'FIRST=',
                 '',
                 '',
                 '',
+                '',
                 'SECOND=',
+                '',
+                '',
             ])),
             new Content(implode(PHP_EOL, [
+                '',
+                '',
                 'FIRST=foo',
+                '',
+                '',
                 'SECOND=bar',
+                '',
+                '',
             ]))
         );
 
         self::assertSame(implode(PHP_EOL, [
             'FIRST=foo',
-            '',
-            '',
             '',
             'SECOND=bar',
         ]), (string) $content);
