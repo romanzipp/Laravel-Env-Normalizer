@@ -142,7 +142,7 @@ class NormalizerService
 
         if ( ! empty($missingVariables)) {
             $normalizedContent[] = '';
-            $normalizedContent[] = '# Not found while normalizing';
+            $normalizedContent[] = '# Additional';
             $normalizedContent[] = '';
 
             foreach ($missingVariables as $name) {

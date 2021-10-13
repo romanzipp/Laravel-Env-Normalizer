@@ -230,7 +230,7 @@ class DryNormalizerTest extends TestCase
             '',
             'SECOND=bar',
             '',
-            '# Not found while normalizing',
+            '# Additional',
             '',
             'THIRD=foobar',
         ]), (string) $content);

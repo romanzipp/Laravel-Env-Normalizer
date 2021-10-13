@@ -25,7 +25,7 @@ class NormalizerTest extends TestCase
             '',
             'MAIL_CONNECTION=foo',
             '',
-            '# Not found while normalizing',
+            '# Additional',
             '',
             'MAIL_FROM=mail@example.com',
         ]), file_get_contents($target));
@@ -50,7 +50,7 @@ class NormalizerTest extends TestCase
             '',
             'MAIL_CONNECTION=foo',
             '',
-            '# Not found while normalizing',
+            '# Additional',
             '',
             'MAIL_FROM=mail@example.com',
         ]), file_get_contents($firstTarget));

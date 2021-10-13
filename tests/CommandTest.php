@@ -68,7 +68,7 @@ class CommandTest extends TestCase
                 '',
                 'MAIL_CONNECTION=foo',
                 '',
-                '# Not found while normalizing',
+                '# Additional',
                 '',
                 'MAIL_FROM=mail@example.com',
             ]))
