@@ -18,8 +18,8 @@ Format `.env` files according to your `.env.example` structure to keep track of 
 
 ## Installation
 
-```
-composer require romanzipp/laravel-env-normalizer
+```shell
+composer require romanzipp/laravel-env-normalizer --dev
 ```
 
 ## Usage
