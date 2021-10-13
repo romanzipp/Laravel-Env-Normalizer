@@ -5,9 +5,7 @@
 [![License](https://img.shields.io/packagist/l/romanzipp/Laravel-Env-Normalizer.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-env-normalizer)
 [![GitHub Build Status](https://img.shields.io/github/workflow/status/romanzipp/Laravel-Env-Normalizer/Tests?style=flat-square)](https://github.com/romanzipp/Laravel-Env-Normalizer/actions)
 
-Format .env files accordiaccording to your .env.example structure.
-
-This package will take your existing .env.example file and apply the structure to other specified .env files.
+Format `.env` files according to your `.env.example` structure to keep track of used and unused variables.
 
 ## Contents
 
@@ -25,31 +23,45 @@ composer require romanzipp/laravel-env-normalizer
 ## Usage
 
 ```shell
-php artisan env:normalize {--reference=.env.example} {--target=.env}
+php artisan env:normalize
 ```
 
-### Call help command for all options
+#### List all available options
 
 ```shell
 php artisan env:normalize --help
 ```
 
-### Specify reference and target file(s)
+#### Specify reference and target file(s)
+
+Reference and target options are optional. If not specified the command will only look for a `.env.example` (as reference) and `.env` file (as target).
 
 ```shell
 php artisan env:normalize --reference=.env.example --target=.env --target=.env.local
 ```
 
-### Automatically format all other .env files
+#### Automatically format all other .env files
+
+This option will discover any other `.env.*` files located in the base path and add them to the target list.
 
 ```shell
 php artisan env:normalize --auto
 ```
 
-### Create backup files
+#### Create backup files
+
+This will create a `{name}.bak` backup file for each modified target file.
 
 ```shell
 php artisan env:normalize --backup
+```
+
+#### Dry run
+
+Log the expected output to the console instead of writing it to the file.
+
+```shell
+php artisan env:normalize --dry
 ```
 
 ### Example normalization
@@ -57,6 +69,11 @@ php artisan env:normalize --backup
 | `.env.example` | previous `.env` | new `.env` |
 | --- | --- | --- |
 | <pre>BASE_URL=http://localhost <br><br># Databse<br><br>DB_HOST=127.0.0.1<br>DB_PORT=${DEFAULT_PORT}<br>DB_USER=<br>DB_PASSWORD=<br><br># Mail<br><br>MAIL_CONNECTION=<br><br><br></pre> | <pre>DB_HOST=10.0.0.10<br>BASE_URL=http://me.com<br>DB_USER=prod<br>DB_PASSWORD=123456<br># Mail<br>MAIL_CONNECTION=foo<br>MAIL_FROM=mail@me.com<br><br><br><br><br><br><br><br><br></pre> | <pre>BASE_URL=http://me.com <br><br># Databse<br><br>DB_HOST=10.0.0.10<br>DB_USER=prod<br>DB_PASSWORD=123456<br><br># Mail<br><br>MAIL_CONNECTION=foo<br><br># Not found while normalizing<br><br>MAIL_FROM=mail@me.com</pre> |
+
+- The base structure for all target `.env` files will be taken from the reference `.env.example` file.
+- Values will be replaced with the existing content
+- Unused (not overwritten) example variables will be removed
+- Additional variables from the `.env` file will be appended to the bottom so you can later add them to your version controled example file
 
 ## Testing
 
