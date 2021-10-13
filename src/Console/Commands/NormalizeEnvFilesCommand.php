@@ -24,23 +24,26 @@ class NormalizeEnvFilesCommand extends Command
         );
 
         if ($this->option('backup')) {
-            $override = false;
             do {
                 try {
-                    $service->withBackup($override);
+                    $service->withBackup($break = isset($override));
+
+                    if ($break) {
+                        $this->info('Creating backup files');
+                        break;
+                    }
                 } catch (\InvalidArgumentException $exception) {
                     $this->warn($exception->getMessage());
-                    $override = $this->confirm('Overwrite?');
+
+                    if ($override = $this->confirm('Overwrite?')) {
+                        continue;
+                    }
                 }
 
-                if ( ! $override) {
-                    $this->info('Exiting');
+                $this->info('Exiting');
 
-                    return 0;
-                }
-
-                break;
-            } while ($override);
+                return 0;
+            } while (true);
         }
 
         if ($this->option('dry')) {
