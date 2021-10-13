@@ -205,7 +205,7 @@ class NormalizerService
             }
         }
 
-        return new Content(implode(PHP_EOL, $normalizedContent));
+        return new Content(implode(PHP_EOL, $normalizedContent), $targetContent->getTitle());
     }
 
     /**
