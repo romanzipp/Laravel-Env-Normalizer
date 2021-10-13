@@ -4,6 +4,7 @@ namespace romanzipp\EnvNormalizer\Test;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use romanzipp\EnvNormalizer\Providers\EnvNormalizerServiceProvider;
+use romanzipp\EnvNormalizer\Services\NormalizerService;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -31,6 +32,11 @@ abstract class TestCase extends BaseTestCase
 
             unlink(__DIR__ . '/Support/out/' . $item);
         }
+    }
+
+    protected function newService(): NormalizerService
+    {
+        return new NormalizerService(__DIR__ . '/Support/.env.example', [__DIR__ . '/Support/out/.env']);
     }
 
     protected function getPackageProviders($app): array

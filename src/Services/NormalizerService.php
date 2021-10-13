@@ -6,7 +6,7 @@ use SplFileInfo;
 
 class NormalizerService
 {
-    private bool $createBackup = true;
+    private bool $createBackup = false;
 
     /**
      * Reference .env.example file.
@@ -33,6 +33,13 @@ class NormalizerService
         $this->validate();
     }
 
+    public function withoutBackup(): self
+    {
+        $this->createBackup = false;
+
+        return $this;
+    }
+
     private function validate(): void
     {
         foreach ([$this->reference, ...$this->output] as $file) {
@@ -53,12 +60,73 @@ class NormalizerService
 
     public function normalize(): void
     {
-        $reference = explode(PHP_EOL, file_get_contents($this->reference));
+        $referenceContent = $this->getContents($this->reference);
 
         if ($this->createBackup) {
+            // TODO
         }
 
         foreach ($this->output as $item) {
+            $itemContent = $this->getContents($item);
         }
+    }
+
+    /**
+     * @param \romanzipp\EnvNormalizer\Services\Content $referenceContent
+     * @param \romanzipp\EnvNormalizer\Services\Content $originalContent
+     *
+     * @return \romanzipp\EnvNormalizer\Services\Content
+     */
+    public function normalizeContent(Content $referenceContent, Content $originalContent): Content
+    {
+        /**
+         * @var string[]
+         */
+        $normalizedContent = [];
+
+        $originalVariables = $originalContent->getVariables();
+        $writtenVariables = [];
+
+        foreach ($referenceContent->getLines() as $line) {
+            // Just append the original line from the reference file if no value needs to be overriden
+            if ( ! $line->isVariable()) {
+                $normalizedContent[] = $line->getContent();
+                continue;
+            }
+
+            // Variable exists in reference file but not in target file, just skip
+            if ( ! $originalContent->hasVariable($line->getVariable())) {
+                continue;
+            }
+
+            // Append the reference variable with the original value
+            $normalizedContent[] = $originalContent->getVariableLine($line);
+
+            $writtenVariables[$line->getVariable()] = $line;
+        }
+
+        $missingVariables = array_diff(array_keys($originalVariables), array_keys($writtenVariables));
+
+        if ( ! empty($missingVariables)) {
+            $normalizedContent[] = '';
+            $normalizedContent[] = '# Not found while normalizing';
+            $normalizedContent[] = '';
+
+            foreach ($missingVariables as $name) {
+                $normalizedContent[] = $originalContent->getVariableLine($originalVariables[$name]);
+            }
+        }
+
+        return new Content(implode(PHP_EOL, $normalizedContent));
+    }
+
+    /**
+     * @param \SplFileInfo $file
+     *
+     * @return \romanzipp\EnvNormalizer\Services\Content
+     */
+    public function getContents(SplFileInfo $file): Content
+    {
+        return new Content(file_get_contents($file->getPathname()));
     }
 }
