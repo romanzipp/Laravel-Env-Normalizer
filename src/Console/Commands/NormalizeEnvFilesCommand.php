@@ -16,7 +16,7 @@ class NormalizeEnvFilesCommand extends Command
                                           {--path= : Base path to look for files}
                                           {--dry : Only print changes to console}';
 
-    public function handle(): void
+    public function handle(): int
     {
         $service = new NormalizerService(
             $this->basePath($this->option('reference')),
@@ -24,7 +24,23 @@ class NormalizeEnvFilesCommand extends Command
         );
 
         if ($this->option('backup')) {
-            $service->withBackup();
+            $override = false;
+            do {
+                try {
+                    $service->withBackup($override);
+                } catch (\InvalidArgumentException $exception) {
+                    $this->warn($exception->getMessage());
+                    $override = $this->confirm('Overwrite?');
+                }
+
+                if ( ! $override) {
+                    $this->info('Exiting');
+
+                    return 0;
+                }
+
+                break;
+            } while ($override);
         }
 
         if ($this->option('dry')) {
@@ -42,6 +58,8 @@ class NormalizeEnvFilesCommand extends Command
                 $this->info(sprintf('Normalized %s', $content->getTitle()));
             }
         }
+
+        return 0;
     }
 
     /**

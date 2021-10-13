@@ -37,8 +37,16 @@ class NormalizerService
         $this->validate();
     }
 
-    public function withBackup(): self
+    public function withBackup(bool $ignoreExisting = false): self
     {
+        if ( ! $ignoreExisting) {
+            foreach ($this->targets as $target) {
+                if (file_exists($target->getPathname() . '.bak')) {
+                    throw new \InvalidArgumentException(sprintf('Backup file "%s.bak" already exists', $target->getFilename()));
+                }
+            }
+        }
+
         $this->createBackup = true;
 
         return $this;
