@@ -24,7 +24,7 @@ class NormalizeEnvFilesCommand extends Command
         );
 
         if ($this->option('backup')) {
-            do {
+            while (true) {
                 try {
                     $service->withBackup($break = isset($override));
 
@@ -43,7 +43,7 @@ class NormalizeEnvFilesCommand extends Command
                 $this->info('Exiting');
 
                 return 0;
-            } while (true);
+            }
         }
 
         if ($this->option('dry')) {
