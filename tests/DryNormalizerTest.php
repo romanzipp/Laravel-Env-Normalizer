@@ -162,13 +162,13 @@ class DryNormalizerTest extends TestCase
     public function testAppendsAdditionalVariablesOnBottom()
     {
         $content = $this->newService()->normalizeContent(
-            $c = new Content(implode(PHP_EOL, [
-                'FIRST=',
-                '',
-                '# Tests',
-                '',
-                'SECOND=',
-            ])),
+           new Content(implode(PHP_EOL, [
+               'FIRST=',
+               '',
+               '# Tests',
+               '',
+               'SECOND=',
+           ])),
             new Content(implode(PHP_EOL, [
                 'FIRST=foo',
                 'THIRD=foobar',

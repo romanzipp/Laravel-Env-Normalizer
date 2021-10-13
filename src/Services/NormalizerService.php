@@ -20,14 +20,18 @@ class NormalizerService
      *
      * @var \SplFileInfo[]
      */
-    private array $output;
+    private array $targets;
 
-    public function __construct(string $referencePath, array $outputPaths)
+    /**
+     * @param string $referencePath
+     * @param string[] $targetPaths
+     */
+    public function __construct(string $referencePath, array $targetPaths)
     {
         $this->reference = new SplFileInfo($referencePath);
 
-        foreach ($outputPaths as $outputPath) {
-            $this->output[] = new SplFileInfo($outputPath);
+        foreach ($targetPaths as $targetPath) {
+            $this->targets[] = new SplFileInfo($targetPath);
         }
 
         $this->validate();
@@ -42,7 +46,7 @@ class NormalizerService
 
     private function validate(): void
     {
-        foreach ([$this->reference, ...$this->output] as $file) {
+        foreach ([$this->reference, ...$this->targets] as $file) {
             /**
              * @var \SplFileInfo $file
              */
@@ -51,8 +55,8 @@ class NormalizerService
             }
         }
 
-        foreach ($this->output as $file) {
-            if ( ! $file->isWritable()) {
+        foreach ($this->targets as $target) {
+            if ( ! $target->isWritable()) {
                 throw new \InvalidArgumentException('Can not write output files');
             }
         }
@@ -66,30 +70,30 @@ class NormalizerService
             // TODO create backup files
         }
 
-        foreach ($this->output as $file) {
+        foreach ($this->targets as $target) {
             $content = $this->normalizeContent(
                 $referenceContent,
-                self::getContents($file)
+                self::getContents($target)
             );
 
-            // TODO write content
+            file_put_contents($target->getPathname(), (string) $content);
         }
     }
 
     /**
      * @param \romanzipp\EnvNormalizer\Services\Content $referenceContent
-     * @param \romanzipp\EnvNormalizer\Services\Content $originalContent
+     * @param \romanzipp\EnvNormalizer\Services\Content $targetContent
      *
      * @return \romanzipp\EnvNormalizer\Services\Content
      */
-    public function normalizeContent(Content $referenceContent, Content $originalContent): Content
+    public function normalizeContent(Content $referenceContent, Content $targetContent): Content
     {
         /**
          * @var string[]
          */
         $normalizedContent = [];
 
-        $originalVariables = $originalContent->getVariables();
+        $originalVariables = $targetContent->getVariables();
         $writtenVariables = [];
 
         foreach ($referenceContent->getLines() as $line) {
@@ -100,12 +104,12 @@ class NormalizerService
             }
 
             // Variable exists in reference file but not in target file, just skip
-            if ( ! $originalContent->hasVariable($line->getVariable())) {
+            if ( ! $targetContent->hasVariable($line->getVariable())) {
                 continue;
             }
 
             // Append the reference variable with the original value
-            $normalizedContent[] = $originalContent->buildVariableLine($line);
+            $normalizedContent[] = $targetContent->buildVariableLine($line);
 
             $writtenVariables[$line->getVariable()] = $line;
         }
@@ -118,7 +122,7 @@ class NormalizerService
             $normalizedContent[] = '';
 
             foreach ($missingVariables as $name) {
-                $normalizedContent[] = $originalContent->buildVariableLine($originalVariables[$name]);
+                $normalizedContent[] = $targetContent->buildVariableLine($originalVariables[$name]);
             }
         }
 
