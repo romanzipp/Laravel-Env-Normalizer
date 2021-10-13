@@ -16,9 +16,12 @@ class Content
      */
     private array $variables;
 
-    public function __construct(string $content)
+    private ?string $title;
+
+    public function __construct(string $content, string $title = null)
     {
         $this->content = trim($content);
+        $this->title = $title;
         $this->variables = [];
 
         $this->lines = array_map(
@@ -49,6 +52,11 @@ class Content
     public function hasVariable(string $name): bool
     {
         return null !== $this->getVariable($name);
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
     }
 
     /**

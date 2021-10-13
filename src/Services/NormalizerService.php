@@ -2,7 +2,6 @@
 
 namespace romanzipp\EnvNormalizer\Services;
 
-use Generator;
 use SplFileInfo;
 
 class NormalizerService
@@ -71,8 +70,13 @@ class NormalizerService
         }
     }
 
-    public function normalize(): void
+    /**
+     * @return \romanzipp\EnvNormalizer\Services\Content[]
+     */
+    public function normalize(): array
     {
+        $contents = [];
+
         $referenceContent = self::getContents($this->reference);
 
         foreach ($this->targets as $target) {
@@ -80,28 +84,34 @@ class NormalizerService
                 copy($target->getPathname(), $target->getPathname() . '.bak');
             }
 
-            $content = $this->normalizeContent(
+            $contents[] = $content = $this->normalizeContent(
                 $referenceContent,
                 self::getContents($target)
             );
 
             file_put_contents($target->getPathname(), (string) $content);
         }
+
+        return $contents;
     }
 
     /**
-     * @return \Generator<\romanzipp\EnvNormalizer\Services\Content>
+     * @return \romanzipp\EnvNormalizer\Services\Content[]
      */
-    public function dry(): Generator
+    public function dry(): array
     {
+        $contents = [];
+
         $referenceContent = self::getContents($this->reference);
 
         foreach ($this->targets as $target) {
-            yield $this->normalizeContent(
+            $contents[] = $this->normalizeContent(
                 $referenceContent,
                 self::getContents($target)
             );
         }
+
+        return $contents;
     }
 
     /**
@@ -205,6 +215,6 @@ class NormalizerService
      */
     public static function getContents(SplFileInfo $file): Content
     {
-        return new Content(file_get_contents($file->getPathname()));
+        return new Content(file_get_contents($file->getPathname()), $file->getFilename());
     }
 }
