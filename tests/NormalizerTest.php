@@ -57,9 +57,7 @@ class NormalizerTest extends TestCase
 
         self::assertFileExists($secondsTarget);
         self::assertSame(implode(PHP_EOL, [
-            '# Databse',
             '',
-            '# Mail',
         ]), file_get_contents($secondsTarget));
     }
 }

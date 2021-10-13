@@ -118,6 +118,44 @@ class DryNormalizerTest extends TestCase
         ]), (string) $content);
     }
 
+    public function testRemovesFollowingCommentsWithoutVariables()
+    {
+        $content = $this->newService()->normalizeContent(
+            new Content(implode(PHP_EOL, [
+                '# First',
+                '',
+                'FIRST=',
+                '',
+                '# Second',
+                '# Third',
+                '',
+                '',
+                '# Fourth',
+                '',
+                '',
+                'SECOND=',
+                '',
+                '',
+                '# Fifth',
+                '',
+            ])),
+            new Content(implode(PHP_EOL, [
+                'FIRST=foo',
+                'SECOND=bar',
+            ]))
+        );
+
+        self::assertSame(implode(PHP_EOL, [
+            '# First',
+            '',
+            'FIRST=foo',
+            '',
+            '# Fourth',
+            '',
+            'SECOND=bar',
+        ]), (string) $content);
+    }
+
     public function testKeepsCommentLines()
     {
         $content = $this->newService()->normalizeContent(

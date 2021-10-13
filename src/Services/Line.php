@@ -31,7 +31,7 @@ class Line
 
     public function isComment(): bool
     {
-        return Str::startsWith($this->content, '#');
+        return self::contentIsComment($this->content);
     }
 
     public function isVariable(): bool
@@ -69,5 +69,15 @@ class Line
         }
 
         return null;
+    }
+
+    public static function contentIsComment(string $content): bool
+    {
+        return Str::startsWith($content, '#');
+    }
+
+    public static function contentIsBlank(string $content): bool
+    {
+        return '' === trim($content);
     }
 }

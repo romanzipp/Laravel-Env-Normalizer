@@ -126,14 +126,51 @@ class NormalizerService
             }
         }
 
+        $normalizedContent = array_values($normalizedContent);
+
+        // Remove comments without following variables
+        foreach ($normalizedContent as $index => $line) {
+            if ( ! isset($normalizedContent[$index])) {
+                continue;
+            }
+
+            if ( ! Line::contentIsComment($line)) {
+                continue;
+            }
+
+            $found = false;
+            $i = $index + 1;
+
+            while (isset($normalizedContent[$i])) {
+                $line = $normalizedContent[$i];
+
+                if ( ! Line::contentIsBlank($line) && ! Line::contentIsComment($line)) {
+                    $found = true;
+                    break;
+                }
+
+                if ( ! $found && Line::contentIsComment($line)) {
+                    break;
+                }
+
+                $i = $i + 1;
+            }
+
+            if ( ! $found) {
+                for ($j = $index; $j <= $i; ++$j) {
+                    unset($normalizedContent[$j]);
+                }
+            }
+        }
+
+        $normalizedContent = array_values($normalizedContent);
+
+        // Remove empty lines with followings counts of 2+
         foreach ($normalizedContent as $index => $line) {
             if (empty($line) && isset($normalizedContent[$index + 1]) && empty($normalizedContent[$index + 1])) {
                 unset($normalizedContent[$index]);
             }
         }
-
-        // TODO remove duplicate following empty lines
-        // TODO remove comments without following variables
 
         return new Content(implode(PHP_EOL, $normalizedContent));
     }
