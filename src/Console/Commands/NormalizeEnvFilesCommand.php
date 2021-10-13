@@ -23,6 +23,10 @@ class NormalizeEnvFilesCommand extends Command
             $this->getTargetFiles()
         );
 
+        if ($this->option('backup')) {
+            $service->withBackup();
+        }
+
         if ($this->option('dry')) {
             foreach ($service->dry() as $item) {
                 $this->line((string) $item);

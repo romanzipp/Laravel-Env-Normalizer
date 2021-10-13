@@ -38,9 +38,9 @@ class NormalizerService
         $this->validate();
     }
 
-    public function withoutBackup(): self
+    public function withBackup(): self
     {
-        $this->createBackup = false;
+        $this->createBackup = true;
 
         return $this;
     }
@@ -75,11 +75,11 @@ class NormalizerService
     {
         $referenceContent = self::getContents($this->reference);
 
-        if ($this->createBackup) {
-            // TODO create backup files
-        }
-
         foreach ($this->targets as $target) {
+            if ($this->createBackup) {
+                copy($target->getPathname(), $target->getPathname() . '.bak');
+            }
+
             $content = $this->normalizeContent(
                 $referenceContent,
                 self::getContents($target)
