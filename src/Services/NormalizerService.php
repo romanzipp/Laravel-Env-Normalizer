@@ -2,6 +2,7 @@
 
 namespace romanzipp\EnvNormalizer\Services;
 
+use Generator;
 use SplFileInfo;
 
 class NormalizerService
@@ -20,7 +21,7 @@ class NormalizerService
      *
      * @var \SplFileInfo[]
      */
-    private array $targets;
+    private array $targets = [];
 
     /**
      * @param string $referencePath
@@ -46,10 +47,18 @@ class NormalizerService
 
     private function validate(): void
     {
+        if (empty($this->targets)) {
+            throw new \InvalidArgumentException('No target specified');
+        }
+
         foreach ([$this->reference, ...$this->targets] as $file) {
             /**
              * @var \SplFileInfo $file
              */
+            if ( ! file_exists($file->getPathname())) {
+                throw new \InvalidArgumentException('File not found');
+            }
+
             if ( ! $file->isFile()) {
                 throw new \InvalidArgumentException('Paths must be files');
             }
@@ -77,6 +86,21 @@ class NormalizerService
             );
 
             file_put_contents($target->getPathname(), (string) $content);
+        }
+    }
+
+    /**
+     * @return \Generator<\romanzipp\EnvNormalizer\Services\Content>
+     */
+    public function dry(): Generator
+    {
+        $referenceContent = self::getContents($this->reference);
+
+        foreach ($this->targets as $target) {
+            yield $this->normalizeContent(
+                $referenceContent,
+                self::getContents($target)
+            );
         }
     }
 
@@ -146,7 +170,6 @@ class NormalizerService
 
                 if ( ! Line::contentIsBlank($line) && ! Line::contentIsComment($line)) {
                     $found = true;
-                    break;
                 }
 
                 if ( ! $found && Line::contentIsComment($line)) {
