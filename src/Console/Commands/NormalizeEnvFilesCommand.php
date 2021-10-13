@@ -45,16 +45,10 @@ class NormalizeEnvFilesCommand extends Command
 
         if ($this->option('dry')) {
             foreach ($service->dry() as $content) {
-                /**
-                 * @var \romanzipp\EnvNormalizer\Services\Content $content
-                 */
                 $this->line((string) $content);
             }
         } else {
             foreach ($service->normalize() as $content) {
-                /**
-                 * @var \romanzipp\EnvNormalizer\Services\Content $content
-                 */
                 $this->info(sprintf('Normalized %s', $content->getTitle()));
             }
         }
