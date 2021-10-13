@@ -58,7 +58,7 @@ class CommandTest extends TestCase
             ->expectsOutput(implode(PHP_EOL, [
                 'BASE_URL=http://example.com',
                 '',
-                '# Databse',
+                '# Database',
                 '',
                 'DB_HOST=10.0.0.10',
                 'DB_USER=prod',
