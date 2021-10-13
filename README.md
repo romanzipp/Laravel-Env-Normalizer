@@ -43,7 +43,13 @@ php artisan env:normalize --reference=.env.example --target=.env --target=.env.l
 ### Automatically format all other .env files
 
 ```shell
-php artisan env:normalize --reference=.env.example --auto
+php artisan env:normalize --auto
+```
+
+### Create backup files
+
+```shell
+php artisan env:normalize --backup
 ```
 
 ### Example normalization
