@@ -34,6 +34,11 @@ class Line
         return self::contentIsHeader($this->content);
     }
 
+    public function isComment(): bool
+    {
+        return self::contentIsComment($this->content);
+    }
+
     public function isVariable(): bool
     {
         if ($this->isBlank() || $this->isHeader()) {
@@ -74,6 +79,11 @@ class Line
     public static function contentIsHeader(string $content): bool
     {
         return Str::startsWith($content, '# ');
+    }
+
+    public static function contentIsComment(string $content): bool
+    {
+        return ! self::contentIsHeader($content) && Str::startsWith($content, '#');
     }
 
     public static function contentIsBlank(string $content): bool

@@ -141,7 +141,10 @@ class NormalizerService
         foreach ($referenceContent->getLines() as $line) {
             // Just append the original line from the reference file if no value needs to be overriden
             if ( ! $line->isVariable()) {
-                $normalizedContent[] = $line->getContent();
+                if ( ! $line->isComment()) {
+                    $normalizedContent[] = $line->getContent();
+                }
+
                 continue;
             }
 
