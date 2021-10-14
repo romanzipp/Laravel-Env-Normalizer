@@ -282,4 +282,33 @@ class DryNormalizerTest extends TestCase
             'THIRD=foobar',
         ]), (string) $content);
     }
+
+    public function testCommentsNotUsedFromTarget()
+    {
+        $content = $this->newService()->normalizeContent(
+            new Content(implode(PHP_EOL, [
+                'FIRST=',
+                '#SECOND=',
+                '',
+                '# Tests',
+                '#FOURTH=',
+                '',
+                'THIRD=',
+            ])),
+            new Content(implode(PHP_EOL, [
+                'FIRST=foo',
+                'THIRD=foobar',
+                '#FOURTH=foobar',
+                '#SECOND=foobar',
+            ]))
+        );
+
+        self::assertSame(implode(PHP_EOL, [
+            'FIRST=foo',
+            '',
+            '# Tests',
+            '',
+            'THIRD=foobar',
+        ]), (string) $content);
+    }
 }
