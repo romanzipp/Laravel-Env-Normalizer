@@ -15,8 +15,8 @@ This packages helps with structuring your example files.
 ## Contents
 
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Usage](#usage)
+- [Roadmap](#roadmap)
 - [Testing](#testing)
 
 ## Installation
@@ -81,7 +81,7 @@ php artisan env:normalize --dry
 - Additional variables from the `.env` file will be appended to the bottom so you can later add them to your version controled example file
 - Commented lines `#FOO=bar` which do not start with hash + space `# ` will be appended to the end
 
-## Features
+## Roadmap
 
 - [ ] Detect similar variables and position them below existing ones (place `MAIL_FROM` below `MAIL_CONNECTION` instead of appendin it to the end)
 
