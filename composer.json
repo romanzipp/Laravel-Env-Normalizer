@@ -1,6 +1,6 @@
 {
     "name": "romanzipp/laravel-env-normalizer",
-    "description": "Laravel Env Normalizer",
+    "description": "Format .env files according to your .env.example structure to keep track of used and unused variables",
     "license": "MIT",
     "type": "library",
     "authors": [
