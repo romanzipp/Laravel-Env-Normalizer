@@ -159,6 +159,28 @@ class NormalizerService
             $writtenVariables[$line->getVariable()] = $line;
         }
 
+        // Append comments (which are no headers) to the end
+
+        $originalComments = [];
+
+        foreach ($targetContent->getLines() as $line) {
+            if ( ! $line->isComment()) {
+                continue;
+            }
+
+            $originalComments[] = $line->getContent();
+        }
+
+        if ( ! empty($originalComments)) {
+            $normalizedContent[] = '';
+            $normalizedContent[] = '# Unset';
+            $normalizedContent[] = '';
+
+            foreach ($originalComments as $originalComment) {
+                $normalizedContent[] = $originalComment;
+            }
+        }
+
         $missingVariables = array_diff(array_keys($originalVariables), array_keys($writtenVariables));
 
         if ( ! empty($missingVariables)) {

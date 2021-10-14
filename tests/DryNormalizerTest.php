@@ -256,34 +256,7 @@ class DryNormalizerTest extends TestCase
         ]), (string) $content);
     }
 
-    public function testNotAllCommentsAreHeaders()
-    {
-        $content = $this->newService()->normalizeContent(
-            new Content(implode(PHP_EOL, [
-                'FIRST=',
-                '#SECOND=',
-                '',
-                '# Tests',
-                '#FOURTH=',
-                '',
-                'THIRD=',
-            ])),
-            new Content(implode(PHP_EOL, [
-                'FIRST=foo',
-                'THIRD=foobar',
-            ]))
-        );
-
-        self::assertSame(implode(PHP_EOL, [
-            'FIRST=foo',
-            '',
-            '# Tests',
-            '',
-            'THIRD=foobar',
-        ]), (string) $content);
-    }
-
-    public function testCommentsNotUsedFromTarget()
+    public function testCommentsAppendedToEnd()
     {
         $content = $this->newService()->normalizeContent(
             new Content(implode(PHP_EOL, [
@@ -309,6 +282,11 @@ class DryNormalizerTest extends TestCase
             '# Tests',
             '',
             'THIRD=foobar',
+            '',
+            '# Unset',
+            '',
+            '#FOURTH=foobar',
+            '#SECOND=foobar',
         ]), (string) $content);
     }
 }
