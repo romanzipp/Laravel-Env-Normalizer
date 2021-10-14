@@ -176,7 +176,7 @@ class NormalizerService
                 continue;
             }
 
-            if ( ! Line::contentIsComment($line)) {
+            if ( ! Line::contentIsHeader($line)) {
                 continue;
             }
 
@@ -186,11 +186,11 @@ class NormalizerService
             while (isset($normalizedContent[$i])) {
                 $line = $normalizedContent[$i];
 
-                if ( ! Line::contentIsBlank($line) && ! Line::contentIsComment($line)) {
+                if ( ! Line::contentIsBlank($line) && ! Line::contentIsHeader($line)) {
                     $found = true;
                 }
 
-                if ( ! $found && Line::contentIsComment($line)) {
+                if ( ! $found && Line::contentIsHeader($line)) {
                     break;
                 }
 

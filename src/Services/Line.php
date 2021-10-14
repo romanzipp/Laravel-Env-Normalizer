@@ -15,8 +15,8 @@ class Line
     public function __construct(string $content)
     {
         $this->content = trim($content);
-        $this->variable = $this->checkVariable();
-        $this->value = $this->checkValue();
+        $this->variable = self::getContentVariable($this->content);
+        $this->value = self::getContentValue($this->content);
     }
 
     public function isBlank(): bool
@@ -29,14 +29,14 @@ class Line
         return $this->content;
     }
 
-    public function isComment(): bool
+    public function isHeader(): bool
     {
-        return self::contentIsComment($this->content);
+        return self::contentIsHeader($this->content);
     }
 
     public function isVariable(): bool
     {
-        if ($this->isBlank() || $this->isComment()) {
+        if ($this->isBlank() || $this->isHeader()) {
             return false;
         }
 
@@ -53,27 +53,27 @@ class Line
         return $this->value;
     }
 
-    private function checkVariable(): ?string
+    public static function getContentValue(string $content): ?string
     {
-        if (preg_match('/^([A-Z0-9_]+)=?/', $this->content, $matches)) {
+        if (preg_match('/^[A-Z0-9_]+=(.*)/', $content, $matches)) {
+            return $matches[1] ?: null;
+        }
+
+        return null;
+    }
+
+    public static function getContentVariable(string $content): ?string
+    {
+        if (preg_match('/^([A-Z0-9_]+)=/', $content, $matches)) {
             return $matches[1];
         }
 
         return null;
     }
 
-    private function checkValue(): ?string
+    public static function contentIsHeader(string $content): bool
     {
-        if (preg_match('/^[A-Z0-9_]+=(.*)/', $this->content, $matches)) {
-            return $matches[1];
-        }
-
-        return null;
-    }
-
-    public static function contentIsComment(string $content): bool
-    {
-        return Str::startsWith($content, '#');
+        return Str::startsWith($content, '# ');
     }
 
     public static function contentIsBlank(string $content): bool
