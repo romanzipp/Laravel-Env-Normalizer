@@ -5,8 +5,6 @@
 [![License](https://img.shields.io/packagist/l/romanzipp/Laravel-Env-Normalizer.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-env-normalizer)
 [![GitHub Build Status](https://img.shields.io/github/workflow/status/romanzipp/Laravel-Env-Normalizer/Tests?style=flat-square)](https://github.com/romanzipp/Laravel-Env-Normalizer/actions)
 
-### ⚠️ **WORK IN PROGRESS** ⚠️
-
 Format `.env` files according to your `.env.example` structure to keep track of used and unused variables.
 
 #### Why?
