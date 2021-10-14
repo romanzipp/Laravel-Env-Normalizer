@@ -9,6 +9,11 @@
 
 Format `.env` files according to your `.env.example` structure to keep track of used and unused variables.
 
+#### Why?
+
+I like to keep a clear overview of all available environment variables by adding some default values to my version controled `.env.example` file.
+This packages helps with structuring your example files.
+
 ## Contents
 
 - [Installation](#installation)
@@ -72,10 +77,14 @@ php artisan env:normalize --dry
 | --- | --- | --- |
 | <pre>BASE_URL=http://localhost <br><br># Database<br><br>DB_HOST=127.0.0.1<br>DB_PORT=${DEFAULT_PORT}<br>DB_USER=<br>DB_PASSWORD=<br><br># Mail<br><br>MAIL_CONNECTION=<br><br><br></pre> | <pre>DB_HOST=10.0.0.10<br>BASE_URL=http://me.com<br>DB_USER=prod<br>DB_PASSWORD=123456<br># Mail<br>MAIL_CONNECTION=foo<br>MAIL_FROM=mail@me.com<br><br><br><br><br><br><br><br><br></pre> | <pre>BASE_URL=http://me.com <br><br># Database<br><br>DB_HOST=10.0.0.10<br>DB_USER=prod<br>DB_PASSWORD=123456<br><br># Mail<br><br>MAIL_CONNECTION=foo<br><br># Additional<br><br>MAIL_FROM=mail@me.com</pre> |
 
-- The base structure for all target `.env` files will be taken from the reference `.env.example` file.
+- The base structure for all target `.env` files will be taken from the reference `.env.example` file
 - Values will be replaced with the existing content
-- Unused (not overwritten) example variables will be removed
+- Unused (not overwritten) example variables will not be added
 - Additional variables from the `.env` file will be appended to the bottom so you can later add them to your version controled example file
+
+## Features
+
+- [ ] Detect similar variables and position them below existing ones (place `MAIL_FROM` below `MAIL_CONNECTION` instead of appendin it to the end)
 
 ## Testing
 
