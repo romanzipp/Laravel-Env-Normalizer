@@ -2,8 +2,6 @@
 
 namespace romanzipp\EnvNormalizer\Services;
 
-use SplFileInfo;
-
 class NormalizerService
 {
     private bool $createBackup = false;
@@ -13,7 +11,7 @@ class NormalizerService
      *
      * @var \SplFileInfo
      */
-    private SplFileInfo $reference;
+    private \SplFileInfo $reference;
 
     /**
      * File to write.
@@ -28,10 +26,10 @@ class NormalizerService
      */
     public function __construct(string $referencePath, array $targetPaths)
     {
-        $this->reference = new SplFileInfo($referencePath);
+        $this->reference = new \SplFileInfo($referencePath);
 
         foreach ($targetPaths as $targetPath) {
-            $this->targets[] = new SplFileInfo($targetPath);
+            $this->targets[] = new \SplFileInfo($targetPath);
         }
 
         $this->validate();
@@ -246,7 +244,7 @@ class NormalizerService
      *
      * @return \romanzipp\EnvNormalizer\Services\Content
      */
-    public static function getContents(SplFileInfo $file): Content
+    public static function getContents(\SplFileInfo $file): Content
     {
         return new Content(file_get_contents($file->getPathname()), $file->getFilename());
     }
