@@ -129,7 +129,7 @@ class NormalizerService
     public function normalizeContent(Content $referenceContent, Content $targetContent): Content
     {
         /**
-         * @var string[]
+         * @var array<int, string|null> $normalizedContent
          */
         $normalizedContent = [];
 
