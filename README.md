@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/romanzipp/Laravel-Env-Normalizer.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-env-normalizer)
 [![Total Downloads](https://img.shields.io/packagist/dt/romanzipp/Laravel-Env-Normalizer.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-env-normalizer)
 [![License](https://img.shields.io/packagist/l/romanzipp/Laravel-Env-Normalizer.svg?style=flat-square)](https://packagist.org/packages/romanzipp/laravel-env-normalizer)
-[![GitHub Build Status](https://img.shields.io/github/workflow/status/romanzipp/Laravel-Env-Normalizer/Tests?style=flat-square)](https://github.com/romanzipp/Laravel-Env-Normalizer/actions)
+[![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/romanzipp/Laravel-Env-Normalizer/tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/romanzipp/Laravel-Env-Normalizer/actions)
 
 Format `.env` files according to your `.env.example` structure to keep track of used and unused variables.
 
