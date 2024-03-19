@@ -121,10 +121,10 @@ class NormalizerService
     }
 
     /**
-     * @param \romanzipp\EnvNormalizer\Services\Content $referenceContent
-     * @param \romanzipp\EnvNormalizer\Services\Content $targetContent
+     * @param Content $referenceContent
+     * @param Content $targetContent
      *
-     * @return \romanzipp\EnvNormalizer\Services\Content
+     * @return Content
      */
     public function normalizeContent(Content $referenceContent, Content $targetContent): Content
     {
@@ -242,7 +242,7 @@ class NormalizerService
     /**
      * @param \SplFileInfo $file
      *
-     * @return \romanzipp\EnvNormalizer\Services\Content
+     * @return Content
      */
     public static function getContents(\SplFileInfo $file): Content
     {

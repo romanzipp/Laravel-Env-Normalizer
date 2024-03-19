@@ -18,7 +18,7 @@ class Content
 
     private ?string $title;
 
-    public function __construct(string $content, string $title = null)
+    public function __construct(string $content, ?string $title = null)
     {
         $this->content = trim($content);
         $this->title = $title;
@@ -62,7 +62,7 @@ class Content
     /**
      * Get the parsed and normalized line for a reference variable line.
      *
-     * @param \romanzipp\EnvNormalizer\Services\Line $referenceLine
+     * @param Line $referenceLine
      *
      * @return string
      */
